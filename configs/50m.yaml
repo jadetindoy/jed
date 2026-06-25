@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# JedAI 50M — Small model for experimentation and rapid iteration
+# ─────────────────────────────────────────────────────────────────────────────
+vocab_size:   32000
+d_model:      512
+n_heads:      8
+n_kv_heads:   8
+n_layers:     8
+max_seq_len:  2048
+ffn_mult:     2.6875
+rms_norm_eps: 1.0e-5
+tie_word_embeddings: true
+rope_theta:   10000.0
+dropout:      0.0
+attention_dropout: 0.0
+
+lr:               3.0e-4
+lr_min:           1.0e-5
+weight_decay:     0.1
+warmup_steps:     500
+max_steps:        50000
+grad_clip:        1.0
+grad_accum_steps: 4
+batch_size:       16
+
+log_every:  10
+save_every: 1000
+output_dir: checkpoints/50m
