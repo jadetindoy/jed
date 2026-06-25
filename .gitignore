@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Checkpoints & model weights
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Tokenized data (large binary files)
+datasets/tokenized/
+
+# Raw & cleaned data (tracked by metadata only)
+datasets/raw/*.txt
+datasets/cleaned/*.txt
+
+# Tokenizer artefacts (regenerate with tokenizer/train.py)
+tokenizer/tokenizer.json
+tokenizer/vocab.json
+
+# Evaluation outputs
+eval_results.json
+*.json.bak
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+
+# Distribution / build
+dist/
+build/
+*.egg-info/
