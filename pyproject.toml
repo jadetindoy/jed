@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "jed-ai"
@@ -36,7 +36,7 @@ eval = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["model*", "training*", "inference*", "evaluation*", "tokenizer*", "datasets*"]
+include = ["model*", "training*", "inference*", "evaluation*", "tokenizer*", "data*"]
 
 [tool.ruff]
 line-length = 100

@@ -1,0 +1,26 @@
+# Test Config for verification
+vocab_size:   32000
+d_model:      256
+n_heads:      4
+n_kv_heads:   4
+n_layers:     4
+max_seq_len:  256
+ffn_mult:     2.6875
+rms_norm_eps: 1.0e-5
+tie_word_embeddings: true
+rope_theta:   10000.0
+dropout:      0.0
+attention_dropout: 0.0
+
+lr:               3.0e-4
+lr_min:           1.0e-5
+weight_decay:     0.1
+warmup_steps:     10
+max_steps:        20
+grad_clip:        1.0
+grad_accum_steps: 1
+batch_size:       4
+
+log_every:  2
+save_every: 10
+output_dir: checkpoints/test

@@ -14,7 +14,11 @@ import argparse
 import json
 import logging
 import time
+import sys
 from pathlib import Path
+
+# Add project root to sys.path to allow running evaluation/benchmark.py directly
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import torch
 from tokenizers import Tokenizer as HFTokenizer

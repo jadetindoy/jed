@@ -1,13 +1,13 @@
 """
-datasets/clean.py
------------------
+data/clean.py
+--------------
 Data cleaning pipeline for jed-ai.
 
-Reads raw text files from datasets/raw/, applies cleaning transformations,
-deduplicates, and writes processed output to datasets/cleaned/.
+Reads raw text files from data/raw/, applies cleaning transformations,
+deduplicates, and writes processed output to data/cleaned/.
 
 Usage:
-    python -m datasets.clean --input_dir datasets/raw --output_dir datasets/cleaned
+    python -m data.clean --input_dir data/raw --output_dir data/cleaned
 """
 
 import argparse
@@ -135,8 +135,8 @@ def process_directory(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="jed-ai data cleaning pipeline")
-    parser.add_argument("--input_dir", type=Path, default=Path("datasets/raw"))
-    parser.add_argument("--output_dir", type=Path, default=Path("datasets/cleaned"))
+    parser.add_argument("--input_dir", type=Path, default=Path("data/raw"))
+    parser.add_argument("--output_dir", type=Path, default=Path("data/cleaned"))
     parser.add_argument(
         "--remove_urls", action="store_true", help="Strip URLs from text"
     )

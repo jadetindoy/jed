@@ -14,7 +14,11 @@ Usage:
 
 import argparse
 import logging
+import sys
 from pathlib import Path
+
+# Add project root to sys.path to allow running evaluation/accuracy.py directly
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import torch
 from tokenizers import Tokenizer as HFTokenizer
@@ -28,10 +32,13 @@ def compute_accuracy(
     model: torch.nn.Module,
     token_ids: torch.Tensor,
     device: torch.device,
-    max_seq_len: int = 2048,
+    max_seq_len: int = None,
     ignore_index: int = 0,
 ) -> tuple[float, int]:
+    if max_seq_len is None:
+        max_seq_len = getattr(getattr(model, "config", None), "max_seq_len", 2048)
     model.eval()
+
     chunk = token_ids[:, :max_seq_len].to(device)
 
     logits, _ = model(chunk)

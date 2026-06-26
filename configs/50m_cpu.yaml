@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# JedAI 50M — CPU-friendly configuration for local training
+# ─────────────────────────────────────────────────────────────────────────────
+vocab_size:   32000
+d_model:      512
+n_heads:      8
+n_kv_heads:   8
+n_layers:     8
+max_seq_len:  256        # Reduced from 2048 to speed up attention computation
+ffn_mult:     2.6875
+rms_norm_eps: 1.0e-5
+tie_word_embeddings: true
+rope_theta:   10000.0
+dropout:      0.0
+attention_dropout: 0.0
+
+lr:               3.0e-4
+lr_min:           1.0e-5
+weight_decay:     0.1
+warmup_steps:     500
+max_steps:        50000
+grad_clip:        1.0
+grad_accum_steps: 1      # Reduced from 4 to run only 1 micro-step per training step
+batch_size:       2        # Reduced from 16 to decrease memory footprint and float operations
+
+log_every:  10
+save_every: 1000
+output_dir: checkpoints/50m_cpu

@@ -18,7 +18,11 @@ Usage:
 import argparse
 import logging
 import math
+import sys
 from pathlib import Path
+
+# Add project root to sys.path to allow running evaluation/perplexity.py directly
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import torch
 import torch.nn.functional as F
@@ -33,11 +37,15 @@ def compute_perplexity(
     token_ids: torch.Tensor,
     device: torch.device,
     stride: int = 512,
-    max_seq_len: int = 2048,
+    max_seq_len: int = None,
 ) -> float:
     """
     Sliding-window perplexity evaluation to avoid truncation bias.
     """
+    if max_seq_len is None:
+        max_seq_len = getattr(getattr(model, "config", None), "max_seq_len", 2048)
+    stride = min(stride, max_seq_len)
+
     model.eval()
     total_nll = 0.0
     total_tokens = 0

@@ -17,7 +17,12 @@ Or via Python:
 
 import argparse
 import logging
+import sys
+from pathlib import Path
 from typing import Optional
+
+# Add project root to sys.path to allow running inference/api.py directly
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware

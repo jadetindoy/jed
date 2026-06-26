@@ -1,0 +1,32 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# JedAI "free" — ~14M params, sized to train on a FREE Colab/Kaggle T4 GPU
+# (also runs on CPU for a slow smoke test). Good first real model.
+#
+# vocab_size is auto-synced from data/tokenized/metadata.json at train time,
+# so it always matches the tokenizer you actually trained.
+# ─────────────────────────────────────────────────────────────────────────────
+vocab_size:   8000
+d_model:      384
+n_heads:      6
+n_kv_heads:   6
+n_layers:     6
+max_seq_len:  512
+ffn_mult:     2.6875
+rms_norm_eps: 1.0e-5
+tie_word_embeddings: true
+rope_theta:   10000.0
+dropout:      0.0
+attention_dropout: 0.0
+
+lr:               3.0e-4
+lr_min:           1.0e-5
+weight_decay:     0.1
+warmup_steps:     100
+max_steps:        3000        # bump to 20000+ once you confirm it works
+grad_clip:        1.0
+grad_accum_steps: 1
+batch_size:       8           # lower to 4 if you hit out-of-memory
+
+log_every:  20
+save_every: 500
+output_dir: checkpoints/free
