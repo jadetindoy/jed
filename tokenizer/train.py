@@ -32,7 +32,14 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # Special tokens — order matters: index 0 = <pad>, 1 = <unk>, etc.
-SPECIAL_TOKENS = ["<pad>", "<unk>", "<bos>", "<eos>", "<sep>", "<mask>"]
+# <|user|> / <|assistant|> are chat turn markers used by the dialogue data in
+# the later chat-finetune stage (training/finetune_chat.py). They're added here
+# so a SINGLE tokenizer covers both base pretraining and chat fine-tuning, and
+# so each marker encodes to one atomic token instead of a pile of bytes.
+SPECIAL_TOKENS = [
+    "<pad>", "<unk>", "<bos>", "<eos>", "<sep>", "<mask>",
+    "<|user|>", "<|assistant|>",
+]
 
 
 def collect_files(input_dir: Path) -> list[str]:
@@ -94,7 +101,7 @@ def train(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train a BPE tokenizer for jed-ai")
     parser.add_argument(
-        "--input_dir", type=Path, default=Path("datasets/cleaned"),
+        "--input_dir", type=Path, default=Path("data/cleaned"),
         help="Directory of cleaned .txt files"
     )
     parser.add_argument(
@@ -102,7 +109,7 @@ def parse_args() -> argparse.Namespace:
         help="Where to save tokenizer.json and vocab.json"
     )
     parser.add_argument(
-        "--vocab_size", type=int, default=32_000,
+        "--vocab_size", type=int, default=16_000,
         help="Target vocabulary size"
     )
     return parser.parse_args()

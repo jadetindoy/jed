@@ -1,7 +1,7 @@
 {
-  "vocab_size": 6727,
+  "vocab_size": 16000,
   "dtype": "uint16",
-  "train_tokens": 122730,
-  "val_tokens": 1647,
-  "total_tokens": 124377
+  "train_tokens": 114150772,
+  "val_tokens": 10380595,
+  "total_tokens": 124531367
 }

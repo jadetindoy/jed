@@ -47,7 +47,7 @@ def save_checkpoint(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = f"ckpt_{tag or step:07d}.pt"
+    filename = f"ckpt_{tag}.pt" if tag else f"ckpt_{step:07d}.pt"
     path = output_dir / filename
 
     state = {

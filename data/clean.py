@@ -3,8 +3,10 @@ data/clean.py
 --------------
 Data cleaning pipeline for jed-ai.
 
-Reads raw text files from data/raw/, applies cleaning transformations,
-deduplicates, and writes processed output to data/cleaned/.
+Reads raw text from data/raw/ — both plain ``.txt`` files and ``.jsonl``
+files (one JSON record per line, text under a ``"text"`` field) — applies
+cleaning transformations, deduplicates at the document level across ALL
+files, and writes processed output to data/cleaned/.
 
 Usage:
     python -m data.clean --input_dir data/raw --output_dir data/cleaned
@@ -12,12 +14,16 @@ Usage:
 
 import argparse
 import hashlib
+import json
 import logging
 import re
 import unicodedata
 from pathlib import Path
 
 from tqdm import tqdm
+
+# Candidate field names to pull document text from, in priority order.
+TEXT_FIELDS = ("text", "content", "body", "raw")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -85,50 +91,109 @@ def document_hash(text: str) -> str:
 # Main pipeline
 # ---------------------------------------------------------------------------
 
+def _extract_text(record: dict) -> str | None:
+    """Pull the document text from a JSONL record using known field names."""
+    for field in TEXT_FIELDS:
+        value = record.get(field)
+        if isinstance(value, str) and value.strip():
+            return value
+    return None
+
+
+def _iter_documents(path: Path):
+    """
+    Yield raw (uncleaned) document strings from a single source file.
+
+    - .txt  -> the whole file is one document.
+    - .jsonl/.json -> one document per line, read from the "text" field
+      (falls back to other common field names).
+    """
+    suffix = path.suffix.lower()
+    if suffix in (".jsonl", ".ndjson", ".json"):
+        with path.open(encoding="utf-8", errors="replace") as fh:
+            for line_no, line in enumerate(fh, 1):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    log.warning(f"{path.name}:{line_no} is not valid JSON, skipping")
+                    continue
+                text = _extract_text(record) if isinstance(record, dict) else None
+                if text is None:
+                    log.warning(
+                        f"{path.name}:{line_no} has no usable text field "
+                        f"(looked for {TEXT_FIELDS}), skipping"
+                    )
+                    continue
+                yield text
+    else:
+        yield path.read_text(encoding="utf-8", errors="replace")
+
+
 def process_directory(
     input_dir: Path,
     output_dir: Path,
     remove_url: bool = False,
     min_chars: int = 50,
 ) -> None:
-    """Process all .txt files in input_dir and write to output_dir."""
+    """Clean every .txt and .jsonl file in input_dir and write to output_dir.
+
+    Documents are deduplicated by content hash across ALL files, so the same
+    article appearing in both an aggregate file (e.g. all_books.jsonl) and an
+    individual file is only kept once.
+    """
     output_dir.mkdir(parents=True, exist_ok=True)
 
     seen_hashes: set[str] = set()
-    total = skipped_short = skipped_dup = written = 0
+    files_seen = docs_total = skipped_short = skipped_dup = docs_written = 0
 
-    files = list(input_dir.rglob("*.txt"))
-    log.info(f"Found {len(files)} raw text file(s) in {input_dir}")
+    patterns = ("*.txt", "*.jsonl", "*.ndjson", "*.json")
+    files = sorted(
+        p for pat in patterns for p in input_dir.rglob(pat)
+        if p.name != ".gitkeep"
+    )
+    log.info(f"Found {len(files)} raw file(s) in {input_dir}")
 
     for path in tqdm(files, desc="Cleaning"):
-        total += 1
+        files_seen += 1
         try:
-            raw = path.read_text(encoding="utf-8", errors="replace")
+            raw_docs = list(_iter_documents(path))
         except Exception as exc:
             log.warning(f"Could not read {path}: {exc}")
             continue
 
-        cleaned = clean_document(raw, remove_url=remove_url)
+        kept_docs: list[str] = []
+        for raw in raw_docs:
+            docs_total += 1
+            cleaned = clean_document(raw, remove_url=remove_url)
 
-        if len(cleaned) < min_chars:
-            skipped_short += 1
+            if len(cleaned) < min_chars:
+                skipped_short += 1
+                continue
+
+            doc_hash = document_hash(cleaned)
+            if doc_hash in seen_hashes:
+                skipped_dup += 1
+                continue
+            seen_hashes.add(doc_hash)
+            kept_docs.append(cleaned)
+            docs_written += 1
+
+        if not kept_docs:
             continue
 
-        doc_hash = document_hash(cleaned)
-        if doc_hash in seen_hashes:
-            skipped_dup += 1
-            continue
-        seen_hashes.add(doc_hash)
-
-        # Preserve relative path structure
-        rel = path.relative_to(input_dir)
+        # One cleaned .txt per source file. Multiple docs (from a .jsonl) are
+        # joined with a blank-line separator; the tokenizer appends <eos> at
+        # the file boundary.
+        rel = path.relative_to(input_dir).with_suffix(".txt")
         out_path = output_dir / rel
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(cleaned, encoding="utf-8")
-        written += 1
+        out_path.write_text("\n\n".join(kept_docs), encoding="utf-8")
 
     log.info(
-        f"Done. Total={total}, written={written}, "
+        f"Done. files={files_seen}, docs={docs_total}, written={docs_written}, "
         f"skipped_short={skipped_short}, skipped_dup={skipped_dup}"
     )
 

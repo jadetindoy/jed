@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# JedAI 50M — sized for a FREE Colab/Kaggle T4 (16 GB) GPU.
+#
+# ~50M params: d_model 640 x 8 layers x 16k vocab (tied embeddings).
+# vocab_size is auto-synced from data/tokenized/metadata.json at train time,
+# so it always matches the tokenizer you actually trained.
+#
+# If you hit CUDA out-of-memory on the T4, lower batch_size to 8 (and/or
+# raise grad_accum_steps to keep the effective batch the same).
+# ─────────────────────────────────────────────────────────────────────────────
+vocab_size:   16000
+d_model:      640
+n_heads:      10
+n_kv_heads:   10
+n_layers:     8
+max_seq_len:  1024
+ffn_mult:     2.6875
+rms_norm_eps: 1.0e-5
+tie_word_embeddings: true
+rope_theta:   10000.0
+dropout:      0.0
+attention_dropout: 0.0
+
+lr:               3.0e-4
+lr_min:           3.0e-5
+weight_decay:     0.1
+warmup_steps:     500
+max_steps:        20000      # ~1.3B tokens seen at effective batch 64 x 1024
+grad_clip:        1.0
+grad_accum_steps: 4
+batch_size:       16         # effective batch = 16 x 4 = 64 sequences
+num_workers:      2
+
+log_every:  20
+save_every: 1000
+output_dir: checkpoints/50m_t4
