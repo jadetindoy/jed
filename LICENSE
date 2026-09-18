@@ -1,0 +1,155 @@
+JED AI — Proprietary Software License
+Copyright (c) 2026 Jade Tindoy. All rights reserved.
+
+===============================================================================
+1. OWNERSHIP
+===============================================================================
+
+This software, including its source code, model architecture, training
+pipeline, tokenizer, configuration files, documentation and all accompanying
+materials (collectively, the "Software"), is the exclusive property of Jade
+Tindoy (the "Licensor") and is protected by copyright law and international
+treaties.
+
+Publication of the Software in a public or shared repository does NOT place it
+in the public domain, does NOT grant any license to it, and does NOT waive any
+right in it. All rights not expressly granted below are reserved.
+
+NOTE ON PRIOR NOTICES: earlier revisions of the project README stated "MIT" as
+the project license. No MIT license file was ever issued with the Software, no
+MIT grant was ever made, and the repository has at no time carried a detected
+license. That statement was an error and is withdrawn. This License is the sole
+and complete statement of the terms on which the Software is made available.
+
+===============================================================================
+2. WHAT YOU MAY DO
+===============================================================================
+
+Subject to Section 3, and provided you do not breach any term of this License,
+you are permitted to:
+
+  (a) VIEW and READ the source code where the Licensor has made it accessible
+      to you;
+
+  (b) EVALUATE the Software — including running it in a private,
+      non-production environment — for the sole purpose of assessing its
+      technical merit, such as investment due diligence, security review,
+      academic study, or considering a commercial relationship with the
+      Licensor.
+
+These permissions are personal to you, non-exclusive, non-transferable,
+royalty-free and revocable by the Licensor at any time on written notice.
+
+===============================================================================
+3. WHAT YOU MAY NOT DO
+===============================================================================
+
+Except as expressly permitted in Section 2, or under a separate written
+agreement signed by the Licensor, you may NOT:
+
+  (a) use the Software for any production, commercial or revenue-generating
+      purpose;
+
+  (b) copy, reproduce, republish, upload, post, mirror or otherwise distribute
+      the Software or any portion of it;
+
+  (c) modify, adapt, translate, or create derivative works based on the
+      Software;
+
+  (d) incorporate the Software, or any portion of it, into any other product,
+      project, model, dataset or codebase;
+
+  (e) use the Software, in whole or in part, to train, fine-tune, distil or
+      otherwise develop any machine-learning model intended for distribution
+      or commercial use;
+
+  (f) sublicense, sell, rent, lease, lend or otherwise transfer any right in
+      the Software to any third party;
+
+  (g) remove, obscure or alter any copyright, trademark or other proprietary
+      notice contained in the Software.
+
+===============================================================================
+4. MODEL WEIGHTS AND TRAINING DATA ARE NOT LICENSED HERE
+===============================================================================
+
+This License covers SOURCE CODE ONLY.
+
+  (a) TRAINED WEIGHTS. Model checkpoints, trained parameters and any derived
+      artifacts (including quantised or converted formats) are NOT distributed
+      with the Software and are NOT licensed by this License. No right to any
+      trained weights is granted, expressly or by implication. Any release of
+      weights will carry its own separate license.
+
+  (b) TRAINING DATA. Corpora, datasets and scraped source material referenced
+      by or stored alongside the Software are NOT licensed by this License.
+      Third-party source material retains the copyright of its respective
+      owners, and no right to redistribute it is granted here.
+
+===============================================================================
+5. THIRD-PARTY COMPONENTS
+===============================================================================
+
+The Software does not vendor third-party source code. It depends on external
+packages installed separately via `requirements.txt`, each governed by its own
+license — including PyTorch (BSD-3-Clause), Hugging Face Tokenizers
+(Apache-2.0), SentencePiece (Apache-2.0), FastAPI (MIT), Uvicorn (BSD-3-Clause)
+and Pydantic (MIT). This License does not restrict, enlarge or override any of
+them, and grants no rights in them.
+
+The recursive-reasoning component in `trm/` is an independent implementation
+written by the Licensor. It is informed by published academic work
+(Jolicoeur-Martineau, "Less is More: Recursive Reasoning with Tiny Networks",
+2025; Wang et al., Hierarchical Reasoning Model). Those papers are cited as
+prior art; no code from them is incorporated.
+
+===============================================================================
+6. FEEDBACK
+===============================================================================
+
+If you send the Licensor suggestions, bug reports or other feedback about the
+Software, the Licensor may use it without restriction and without any
+obligation to you.
+
+===============================================================================
+7. NO WARRANTY
+===============================================================================
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NONINFRINGEMENT.
+
+JED AI is experimental research software. Language models produce output that
+may be inaccurate, offensive, biased or fabricated. Nothing produced by the
+Software should be relied upon as factual, professional, legal, medical or
+financial advice. You assume the entire risk of using it.
+
+===============================================================================
+8. LIMITATION OF LIABILITY
+===============================================================================
+
+IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+9. TERMINATION
+===============================================================================
+
+This License terminates automatically and immediately if you breach any of its
+terms. On termination you must cease all use of the Software and destroy all
+copies in your possession or control. Sections 1, 4, 6, 7, 8 and 10 survive
+termination.
+
+===============================================================================
+10. COMMERCIAL LICENSING
+===============================================================================
+
+Commercial licenses, research collaborations, weight-licensing agreements and
+partnership enquiries are welcome. Nothing in this License is intended to
+prevent a commercial relationship — it exists so that such a relationship is
+agreed rather than assumed.
+
+    Jade Tindoy
+    jadetindoy@hotmail.com
